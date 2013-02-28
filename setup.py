@@ -12,7 +12,7 @@ def read(fname):
 
 setup(
     name="django-tagging-translated",
-    version=document_library.__version__,
+    version=tagging_translated.__version__,
     description=read('DESCRIPTION'),
     long_description=read('README.rst'),
     license='The MIT License',
