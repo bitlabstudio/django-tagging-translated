@@ -34,8 +34,8 @@ def tag_post_save_handler(sender, **kwargs):
     try:
         translation = instance.tagtitle_set.get(language='en')
     except TagTitle.DoesNotExist:
-        translation = TagTitle.objects.create(trans_name=instance.name,
-            tag=instance, language='en')
+        translation = TagTitle.objects.create(
+            trans_name=instance.name, tag=instance, language='en')
     if translation.trans_name != instance.name:
         instance.name = translation.trans_name
         instance.save_base(raw=True)

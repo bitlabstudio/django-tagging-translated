@@ -9,7 +9,6 @@ from tagging.admin import TagAdmin
 from tagging.models import Tag
 
 
-
 class TagAdmin(TranslationAdmin, TagAdmin):
     exclude = ['name', ]
     list_display = ['trans_name', 'languages', ]
@@ -19,8 +18,6 @@ class TagAdmin(TranslationAdmin, TagAdmin):
         trans = get_preferred_translation_from_lang(obj, lang)
         return trans.trans_name
     trans_name.short_description = _('Name')
-
-
 
 
 admin.site.unregister(Tag)
