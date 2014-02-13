@@ -1,6 +1,6 @@
 """Models for the ``tagging_translated`` app."""
 from django.db import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
@@ -48,7 +48,16 @@ def tag_post_save_handler(sender, **kwargs):
                 name=instance.name, tag=instance, language_code='en')
 
 
-@receiver(post_save, sender=TagTranslated)
+@receiver(pre_save, sender=TagTranslated)
+def tagtranslated_pre_save_handler(sender, **kwargs):
+    # required to update the field below when creating a tag from the improved
+    # admin
+    instance = kwargs.get('instance')
+    if not instance.tag_id:
+        instance.tag_id = instance.tag.id
+
+
+@receiver(post_save, sender=TagTranslated._meta.translations_model)
 def tagtranslated_post_save_handler(sender, **kwargs):
     """
     Ensure that the original tag name gets updated when the english
@@ -56,8 +65,7 @@ def tagtranslated_post_save_handler(sender, **kwargs):
 
     """
     instance = kwargs.get('instance')
-    created = kwargs.get('created')
-    if instance.name != instance.tag.name and not created and \
+    if instance.name != instance.master.tag.name and \
             instance.language_code == 'en':
-        instance.tag.name = instance.name
-        instance.tag.save_base(raw=True)
+        instance.master.tag.name = instance.name
+        instance.master.tag.save_base(raw=True)
