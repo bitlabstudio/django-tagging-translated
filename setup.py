@@ -17,12 +17,17 @@ setup(
     long_description=read('README.rst'),
     license='The MIT License',
     platforms=['OS Independent'],
-    keywords='django, tagging, i18n, translation, simple-translation',
+    keywords='django, tagging, i18n, translation, django-hvad',
     author='Martin Brochhaus',
     author_email='mbrochh@gmail.com',
     url="https://github.com/bitmazk/django-tagging-translated",
     packages=find_packages(),
     include_package_data=True,
+    install_requires=[
+        'django',
+        'django-hvad',
+        'django-tagging',
+    ],
     tests_require=[
         'fabric',
         'factory_boy',
